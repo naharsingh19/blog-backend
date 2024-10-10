@@ -11,11 +11,16 @@ const auth = async (req, res, next) => {
       throw new Error('User not found');
     }
 
-    req.user = user;
     req.token = token;
+    req.user = {
+      _id: user._id,
+      username: user.username
+    };
+    console.log('Authenticated user:', req.user);
     next();
   } catch (error) {
-    res.status(401).send({ error: 'Please authenticate.', details: error.message });
+    console.error('Authentication error:', error);
+    res.status(401).send({ error: 'Please authenticate.' });
   }
 };
 
